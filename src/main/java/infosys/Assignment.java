@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -130,55 +131,52 @@ public class Assignment {
 		return jsonObj;
 	}
 
-//	/**
-//	 * Average the numbers in the response time column of each domain
-//	 * 
-//	 * @author Jackie
-//	 * 
-//	 * @param jsonLog log
-//	 * @return JSONObject
-//	 */
-//	private JSONObject averageResponseTime(JSONArray jsonLog) {
-//		JSONObject jsonObj = new JSONObject();// return JSONObject
-//
-//		for (int i = 0; i < jsonLog.length(); i++) {
-//			JSONObject iJsonObj = jsonLog.getJSONObject(i);//
-//
-//			String iUrl = iJsonObj.getString("url");// request url
-//			int iTime = iJsonObj.getInt("time");// response time
-////			int iCode = iJsonObj.getInt("code");// http status code
-//			URI iUri = null;// request url
-//
-//			try {
-//				iUri = new URI(iUrl);
-//			} catch (URISyntaxException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			String iDomain = iUri.getHost();// the domain of the url
-//
-//			if (jsonObj.isNull(iDomain)) {
-//				// if domain grouping by http status code is empty
-//				jsonObj.put(iDomain, new JSONObject());
-//			}
-//
-//			JSONObject iJsonCode = jsonObj.getJSONObject(iDomain);// the number of occurrences of the domain grouping by
-//																	// http status code
-//			String iStrCode = String.valueOf(iCode);// http status code(string type)
-//
-//			if (iJsonCode.isNull(iStrCode)) {
-//				// if domain grouping by http status code is empty
-//				iJsonCode.put(iStrCode, 0);
-//			}
-//
-//			int iCount = iJsonCode.getInt(iStrCode);
-//			iCount++;
-//			iJsonCode.put(iStrCode, iCount);
-//		}
-//
-//		return jsonObj;
-//	}
+	/**
+	 * Average the numbers in the response time column of each domain
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param jsonLog log
+	 * @return JSONObject
+	 */
+	private JSONObject averageResponseTime(JSONArray jsonLog) {
+		JSONObject jsonInputObj = responseTime(jsonLog);
+
+		return averageResponseTime(jsonInputObj);
+	}
+
+	/**
+	 * Average the numbers in the response time column of each domain
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param jsonInputObj the response time of each domain
+	 * @return JSONObject
+	 */
+	private JSONObject averageResponseTime(JSONObject jsonInputObj) {
+		JSONObject jsonObj = new JSONObject();// return JSONObject
+
+		for (Iterator<String> iterator = jsonInputObj.keys(); iterator.hasNext();) {
+			// run all domain
+			String iDomain = iterator.next();// domain name
+			JSONArray iJsonTime = jsonInputObj.getJSONArray(iDomain);// response time of domain
+
+			int iTotal = 0;// total response time of domain
+			int iAmount = iJsonTime.length();
+
+			for (int j = 0; j < iAmount; j++) {
+				// run all response time to get the total
+				int jTime = iJsonTime.getInt(j);// response time of domain
+				iTotal = iTotal + jTime;
+			}
+
+			double iAvg = iTotal / iAmount;// average response time of domain
+
+			jsonObj.put(iDomain, iAvg);
+		}
+
+		return jsonObj;
+	}
 
 	/**
 	 * Returns a HashMap object that calculates length and substring of the longest
@@ -307,8 +305,11 @@ public class Assignment {
 //		// test countDomainGroupByCode
 //		System.out.println(assignment.countDomainGroupByCode(jsonLog));
 
+//		// test responseTime
+//		System.out.println(assignment.responseTime(jsonLog));
+
 		// test responseTime
-		System.out.println(assignment.responseTime(jsonLog));
+		System.out.println(assignment.averageResponseTime(jsonLog));
 
 //		// test longestSubstring
 //		String s = "bbbbabcabcdcccccccccccccccccccccccccccabde";
