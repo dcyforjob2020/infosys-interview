@@ -3,8 +3,11 @@ package infosys;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -162,7 +165,7 @@ public class Assignment {
 			JSONArray iJsonTime = jsonInputObj.getJSONArray(iDomain);// response time of domain
 
 			double iTotal = 0;// total response time of domain
-			int iAmount = iJsonTime.length();
+			int iAmount = iJsonTime.length();// amount response time of domain
 
 			for (int j = 0; j < iAmount; j++) {
 				// run all response time to get the total
@@ -173,6 +176,61 @@ public class Assignment {
 			double iAvg = iTotal / iAmount;// average response time of domain
 
 			jsonObj.put(iDomain, iAvg);
+		}
+
+		return jsonObj;
+	}
+
+	/**
+	 * Average the numbers in the response time column of each domain
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param jsonLog log
+	 * @return JSONObject
+	 */
+	private JSONObject responseTime99percentile(JSONArray jsonLog) {
+		JSONObject jsonInputObj = responseTime(jsonLog);
+
+		return responseTime99percentile(jsonInputObj);
+	}
+
+	/**
+	 * 99 percentile of each domain (based on the response time column)
+	 * 
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param jsonInputObj the response time of each domain
+	 * @return JSONObject
+	 */
+	private JSONObject responseTime99percentile(JSONObject jsonInputObj) {
+		JSONObject jsonObj = new JSONObject();// return JSONObject
+
+		for (Iterator<String> iterator = jsonInputObj.keys(); iterator.hasNext();) {
+			// run all domain
+			String iDomain = iterator.next();// domain name
+			JSONArray iJsonTime = jsonInputObj.getJSONArray(iDomain);// response time of domain
+
+			int iAmount = iJsonTime.length();// amount response time of domain
+			Vector<Integer> iV = new Vector<Integer>();
+
+			for (int j = 0; j < iAmount; j++) {
+				// run all response time
+				iV.add(iJsonTime.getInt(j));
+			}
+
+			Integer[] iArrTime = iV.toArray(new Integer[0]);// response time of domain for sorting
+			Arrays.sort(iArrTime);
+
+			int i99percentile = (int) Math.ceil(iAmount * 0.99);// the amount of response time of 99 percentile
+
+			JSONObject iJson99Time = new JSONObject();// 99 percentile of response time of each domain
+
+			iJson99Time.put("start", iArrTime[0]);
+			iJson99Time.put("end", iArrTime[i99percentile - 1]);
+
+			jsonObj.put(iDomain, iJson99Time);
 		}
 
 		return jsonObj;
@@ -302,23 +360,27 @@ public class Assignment {
 				;
 		// @formatter:on
 
-//		// test parseLog
+		// test parseLog
 		JSONArray jsonLog = assignment.parseLog(log);
 
-//		// test countDomainGroupByCode
+		// test countDomainGroupByCode
 //		System.out.println(assignment.countDomainGroupByCode(jsonLog));
 
-//		// test responseTime
+		// test responseTime
 //		System.out.println(assignment.responseTime(jsonLog));
 
-		// test responseTime
-		System.out.println(assignment.averageResponseTime(jsonLog));
+		// test averageResponseTime
+//		System.out.println(assignment.averageResponseTime(jsonLog));
 
-//		// test longestSubstring
+		// test averageResponseTime
+		System.out.println(assignment.responseTime99percentile(jsonLog));
+
+		// test longestSubstring
 //		String s = "bbbbabcabcdcccccccccccccccccccccccccccabde";
 //		System.out.println(assignment.longestSubstring(s));
 
-		int[] coins = { 25, 10, 5 };
+		// test MinimumNumberOfCoins
+//		int[] coins = { 25, 10, 5 };
 //		System.out.println(assignment.MinimumNumberOfCoins(coins, 30));
 	}
 }
