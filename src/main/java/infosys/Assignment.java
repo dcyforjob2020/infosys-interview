@@ -161,7 +161,7 @@ public class Assignment {
 			String iDomain = iterator.next();// domain name
 			JSONArray iJsonTime = jsonInputObj.getJSONArray(iDomain);// response time of domain
 
-			int iTotal = 0;// total response time of domain
+			double iTotal = 0;// total response time of domain
 			int iAmount = iJsonTime.length();
 
 			for (int j = 0; j < iAmount; j++) {
@@ -287,16 +287,19 @@ public class Assignment {
 
 		// test log parsing
 		// @formatter:off
-		String log = "http://www.yahoo.com/ 150 200\r\n" + 
-				"https://www.yahoo.com/news/ 200 200\r\n" + 
-				"https://sports.yahoo.com/ 10 200\r\n" + 
-				"https://techcrunch.com/startups/ 30 200\r\n" + 
-				"https://www.huffingtonpost.com/ 70 200\r\n" + 
-				"https://www.huffingtonpost.co.uk/ 1000 200\r\n" + 
-				"https://www.huffingtonpost.co.uk/entry/brexit-secretary?utm_hp_ref=uk-politics 500 404\r\n" + 
-				"https://developer.github.com/apps/building-oauth-apps/ 40 200\r\n" + 
-				"https://developer.github.com/v3/ 33 200\r\n" + 
-				"https://developer.github.com:8080/v3/ 77 500\r\n";
+		String log = "http://www.yahoo.com/ 150 200\r\n"
+				+"https://www.yahoo.com/news/ 200 200\r\n"
+				+"https://sports.yahoo.com/ 10 200\r\n"
+				+"https://techcrunch.com/startups/ 30 200\r\n"
+				+"https://www.huffingtonpost.com/ 70 200\r\n"
+				+"https://www.huffingtonpost.co.uk/ 1000 200\r\n"
+				+"https://www.huffingtonpost.co.uk/entry/brexit-secretary?utm_hp_ref=uk-politics 500 404\r\n"
+				+"https://developer.github.com/apps/building-oauth-apps/ 40 200\r\n"
+				+"https://developer.github.com/v3/ 33 200\r\n"
+				+"https://developer.github.com:8080/v3/ 77 500\r\n"
+				+"https://test.com/v3/ 33 200\r\n"
+				+"https://test.com:8080/v3/ 34 500\r\n"
+				;
 		// @formatter:on
 
 //		// test parseLog
