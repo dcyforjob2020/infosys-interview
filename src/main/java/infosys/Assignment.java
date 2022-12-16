@@ -90,8 +90,99 @@ public class Assignment {
 	}
 
 	/**
-	 * Returns a JSONObject object that calculates length and substring of the
-	 * longest substring of the input string without repeating characters
+	 * the response time of each domain
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param jsonLog log
+	 * @return JSONObject
+	 */
+	private JSONObject responseTime(JSONArray jsonLog) {
+		JSONObject jsonObj = new JSONObject();// return JSONObject
+
+		for (int i = 0; i < jsonLog.length(); i++) {
+			JSONObject iJsonObj = jsonLog.getJSONObject(i);//
+
+			String iUrl = iJsonObj.getString("url");// request url
+			int iTime = iJsonObj.getInt("time");// response time
+//			int iCode = iJsonObj.getInt("code");// http status code
+			URI iUri = null;// request url
+
+			try {
+				iUri = new URI(iUrl);
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			String iDomain = iUri.getHost();// the domain of the url
+
+			if (jsonObj.isNull(iDomain)) {
+				// if domain grouping by http status code is empty
+				jsonObj.put(iDomain, new JSONArray());
+			}
+
+			JSONArray iJsonTime = jsonObj.getJSONArray(iDomain);// response time of domain
+
+			iJsonTime.put(iTime);
+		}
+
+		return jsonObj;
+	}
+
+//	/**
+//	 * Average the numbers in the response time column of each domain
+//	 * 
+//	 * @author Jackie
+//	 * 
+//	 * @param jsonLog log
+//	 * @return JSONObject
+//	 */
+//	private JSONObject averageResponseTime(JSONArray jsonLog) {
+//		JSONObject jsonObj = new JSONObject();// return JSONObject
+//
+//		for (int i = 0; i < jsonLog.length(); i++) {
+//			JSONObject iJsonObj = jsonLog.getJSONObject(i);//
+//
+//			String iUrl = iJsonObj.getString("url");// request url
+//			int iTime = iJsonObj.getInt("time");// response time
+////			int iCode = iJsonObj.getInt("code");// http status code
+//			URI iUri = null;// request url
+//
+//			try {
+//				iUri = new URI(iUrl);
+//			} catch (URISyntaxException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			String iDomain = iUri.getHost();// the domain of the url
+//
+//			if (jsonObj.isNull(iDomain)) {
+//				// if domain grouping by http status code is empty
+//				jsonObj.put(iDomain, new JSONObject());
+//			}
+//
+//			JSONObject iJsonCode = jsonObj.getJSONObject(iDomain);// the number of occurrences of the domain grouping by
+//																	// http status code
+//			String iStrCode = String.valueOf(iCode);// http status code(string type)
+//
+//			if (iJsonCode.isNull(iStrCode)) {
+//				// if domain grouping by http status code is empty
+//				iJsonCode.put(iStrCode, 0);
+//			}
+//
+//			int iCount = iJsonCode.getInt(iStrCode);
+//			iCount++;
+//			iJsonCode.put(iStrCode, iCount);
+//		}
+//
+//		return jsonObj;
+//	}
+
+	/**
+	 * Returns a HashMap object that calculates length and substring of the longest
+	 * substring of the input string without repeating characters
 	 * 
 	 * @author Jackie
 	 * 
@@ -148,6 +239,45 @@ public class Assignment {
 		return jsonObj;
 	}
 
+	/**
+	 * Return The Coins Combination With The Minimum Number Of Coins
+	 * 
+	 * @author Jackie
+	 * 
+	 * @param coins       exchanging coins
+	 * @param totalChange the total for exchange
+	 * @return JSONObject with keys of coin value and the number of coins that
+	 *         value.
+	 */
+	private JSONObject MinimumNumberOfCoins(int[] coins, int totalExchange) {
+		JSONObject jsonObj = new JSONObject();// return JSONObject
+
+		Arrays.parallelSort(coins);
+
+		System.out.println("coins===>" + Arrays.toString(coins));
+
+		int numberOfCoinValue = coins.length;// number of coin value
+		HashMap<Integer, Integer> hmCurrent = new HashMap<Integer, Integer>();// return HashMap
+		int total = 0;// current total coin value
+
+		for (int i = 0; i < numberOfCoinValue; i++) {
+			int iCoin = coins[numberOfCoinValue - i - 1];// current coin value
+
+			while (total + iCoin < totalExchange) {
+				// can add coin
+				int jCoinAmount = hmCurrent.getOrDefault(iCoin, 0);// amount of coin
+
+				jCoinAmount++;
+
+				hmCurrent.put(iCoin, jCoinAmount);
+
+				total = total + iCoin;
+			}
+		}
+
+		return jsonObj;
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 //		char a = 'a';
@@ -171,11 +301,16 @@ public class Assignment {
 				"https://developer.github.com:8080/v3/ 77 500\r\n";
 		// @formatter:on
 
-		// test longestSubstring
+//		// test parseLog
 		JSONArray jsonLog = assignment.parseLog(log);
-		System.out.println(assignment.countDomainGroupByCode(jsonLog));
 
-		// test longestSubstring
+//		// test countDomainGroupByCode
+//		System.out.println(assignment.countDomainGroupByCode(jsonLog));
+
+		// test responseTime
+		System.out.println(assignment.responseTime(jsonLog));
+
+//		// test longestSubstring
 //		String s = "bbbbabcabcdcccccccccccccccccccccccccccabde";
 //		System.out.println(assignment.longestSubstring(s));
 
