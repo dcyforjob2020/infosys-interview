@@ -307,33 +307,70 @@ public class Assignment {
 	 * @return JSONObject with keys of coin value and the number of coins that
 	 *         value.
 	 */
-	private JSONObject MinimumNumberOfCoins(int[] coins, int totalExchange) {
-		JSONObject jsonObj = new JSONObject();// return JSONObject
-
+	private int minimumNumberOfCoins(int[] coins, int totalExchange) {
 		Arrays.parallelSort(coins);
 
-		System.out.println("coins===>" + Arrays.toString(coins));
+		int coinLen = coins.length;// types of coins
+		int row = coinLen + 1;// dp row
+		int column = totalExchange + 1;// dp column
+		int infinity = totalExchange + 1;// infinity
+		int[][] dp = new int[row][column];// Dynamic Programming
 
-		int numberOfCoinValue = coins.length;// number of coin value
-		HashMap<Integer, Integer> hmCurrent = new HashMap<Integer, Integer>();// return HashMap
-		int total = 0;// current total coin value
+		for (int i = 1; i < row; i++) {
+			// put zero for the first column
+			dp[i][0] = 0;
+		}
 
-		for (int i = 0; i < numberOfCoinValue; i++) {
-			int iCoin = coins[numberOfCoinValue - i - 1];// current coin value
+		for (int i = 1; i < column; i++) {
+			dp[0][i] = infinity;
+		}
 
-			while (total + iCoin < totalExchange) {
-				// can add coin
-				int jCoinAmount = hmCurrent.getOrDefault(iCoin, 0);// amount of coin
+		for (int i = 1; i < row; i++) {
+			int iCoinValue = coins[i - 1];// current coin value
 
-				jCoinAmount++;
+			for (int j = 1; j < column; j++) {
+				int jTotalExchange = j;// current total exchange
+				int jUpValue = dp[i - 1][j];// upper index value default no way to solve
+				int jCurrentValue = 0;// current value
 
-				hmCurrent.put(iCoin, jCoinAmount);
+//				System.out.println("iCoinValue===>" + iCoinValue);
+//				System.out.println("jTotalExchange===>" + jTotalExchange);
+//				System.out.println("jUpValue===>" + jUpValue);
 
-				total = total + iCoin;
+				if (iCoinValue > jTotalExchange) {
+					// coin value too big inherit coins number above
+					jCurrentValue = jUpValue;
+				} else {
+					int jleftValue = dp[i][j - iCoinValue];// left index value default
+
+					jCurrentValue = jleftValue + 1;
+
+//					System.out.println("jCurrentValue===>" + jCurrentValue);
+//					System.out.println("jleftValue===>" + jleftValue);
+
+					if (jCurrentValue > jUpValue) {
+						// upper value is smaller than current
+						jCurrentValue = jUpValue;
+					}
+				}
+
+//				System.out.println("jCurrentValue===>" + jCurrentValue);
+//				System.out.println("===>");
+
+				dp[i][j] = jCurrentValue;
 			}
 		}
 
-		return jsonObj;
+//		System.out.println("dp[][]===>" + Arrays.deepToString(dp));
+
+		int answer = dp[row - 1][column - 1];
+
+		if (answer > totalExchange) {
+			// doesnt have a solution
+			answer = -1;
+		}
+
+		return answer;
 	}
 
 	public static void main(String[] args) {
@@ -344,9 +381,9 @@ public class Assignment {
 //		System.out.println(a == character);
 
 		// test card game
-		Game game = new Game();
-
-		game.start(4);
+//		Game game = new Game();
+//
+//		game.start(4);
 
 		Assignment assignment = new Assignment();
 
@@ -387,7 +424,13 @@ public class Assignment {
 //		System.out.println(assignment.longestSubstring(s));
 
 		// test MinimumNumberOfCoins
-//		int[] coins = { 25, 10, 5 };
-//		System.out.println(assignment.MinimumNumberOfCoins(coins, 30));
+		int[] coins = { 25, 10, 5 };
+		System.out.println(assignment.minimumNumberOfCoins(coins, 30));
+		System.out.println(assignment.minimumNumberOfCoins(coins, 4));
+		System.out.println(assignment.minimumNumberOfCoins(coins, 26));
+		coins = new int[] { 9, 6, 5, 1 };
+		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
+		coins = new int[] { 9, 6, 5, 2 };
+		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
 	}
 }
