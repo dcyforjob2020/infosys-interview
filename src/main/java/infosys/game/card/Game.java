@@ -10,10 +10,18 @@ public class Game {
 	private Dealer dealer = new Dealer();// dealer that deals the card
 	private StringBuffer sbGameRecord = new StringBuffer();// record of the game
 
-	public void joinGame(Player p) {
+	/**
+	 * player join into the game
+	 * 
+	 * @param p player that joins the game
+	 */
+	private void joinGame(Player p) {
 		vPlayers.add(p);
 	}
 
+	/**
+	 * create a deck of card in this game
+	 */
 	private void createDeckCard() {
 		this.vCards = new Vector<Card>();
 
@@ -108,6 +116,26 @@ public class Game {
 		return hsWinner;
 	}
 
+	private String winnerMessage() {
+		StringBuffer sb = new StringBuffer();// message of the winner of the game
+
+		sb.append("the winner of the game is ");
+
+		HashSet<Player> winners = getWinner();
+
+		for (Iterator<Player> iterator = getWinner().iterator(); iterator.hasNext();) {
+			Player iPlayer = iterator.next();
+
+			sb.append(iPlayer.getName()).append(", ");
+		}
+
+		if (!winners.isEmpty()) {
+			sb.setLength(sb.length() - 2);
+		}
+
+		return sb.toString();
+	}
+
 	public void start(int playerNum) {
 		if (playerNum < 1) {
 			// no player end game
@@ -126,23 +154,6 @@ public class Game {
 		}
 
 		System.out.print(sbGameRecord.toString());
-
-		StringBuffer sbGameWinner = new StringBuffer();// message of the winner of the game
-
-		sbGameWinner.append("the winner of the game is ");
-
-		HashSet<Player> winners = getWinner();
-
-		for (Iterator<Player> iterator = getWinner().iterator(); iterator.hasNext();) {
-			Player iPlayer = iterator.next();
-
-			sbGameWinner.append(iPlayer.getName()).append(", ");
-		}
-
-		if (!winners.isEmpty()) {
-			sbGameWinner.setLength(sbGameWinner.length() - 2);
-		}
-
-		System.out.println(sbGameWinner.toString());
+		System.out.println(winnerMessage());
 	}
 }

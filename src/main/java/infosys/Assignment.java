@@ -3,16 +3,11 @@ package infosys;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import infosys.game.card.Game;
 
 public class Assignment {
 
@@ -24,7 +19,7 @@ public class Assignment {
 	 * @param s log string
 	 * @return JSONArray
 	 */
-	private JSONArray parseLog(String s) {
+	public JSONArray parseLog(String s) {
 		JSONArray jsonArr = new JSONArray();// return JSONArray
 
 		String[] arrLine = s.split("\r?\n|\r");// split log to lines
@@ -53,7 +48,7 @@ public class Assignment {
 	 * @param jsonLog log
 	 * @return JSONObject
 	 */
-	private JSONObject countDomainGroupByCode(JSONArray jsonLog) {
+	public JSONObject countDomainGroupByCode(JSONArray jsonLog) {
 		JSONObject jsonObj = new JSONObject();// return JSONObject
 
 		for (int i = 0; i < jsonLog.length(); i++) {
@@ -144,7 +139,7 @@ public class Assignment {
 	 * @param jsonLog log
 	 * @return JSONObject
 	 */
-	private JSONObject averageResponseTime(JSONArray jsonLog) {
+	public JSONObject averageResponseTime(JSONArray jsonLog) {
 		JSONObject jsonInputObj = responseTime(jsonLog);
 
 		return averageResponseTime(jsonInputObj);
@@ -158,7 +153,7 @@ public class Assignment {
 	 * @param jsonInputObj the response time of each domain
 	 * @return JSONObject
 	 */
-	private JSONObject averageResponseTime(JSONObject jsonInputObj) {
+	public JSONObject averageResponseTime(JSONObject jsonInputObj) {
 		JSONObject jsonObj = new JSONObject();// return JSONObject
 
 		for (Iterator<String> iterator = jsonInputObj.keys(); iterator.hasNext();) {
@@ -191,7 +186,7 @@ public class Assignment {
 	 * @param jsonLog log
 	 * @return JSONObject
 	 */
-	private JSONObject responseTime99percentile(JSONArray jsonLog) {
+	public JSONObject responseTime99percentile(JSONArray jsonLog) {
 		JSONObject jsonInputObj = responseTime(jsonLog);
 
 		return responseTime99percentile(jsonInputObj);
@@ -206,7 +201,7 @@ public class Assignment {
 	 * @param jsonInputObj the response time of each domain
 	 * @return JSONObject
 	 */
-	private JSONObject responseTime99percentile(JSONObject jsonInputObj) {
+	public JSONObject responseTime99percentile(JSONObject jsonInputObj) {
 		JSONObject jsonObj = new JSONObject();// return JSONObject
 
 		for (Iterator<String> iterator = jsonInputObj.keys(); iterator.hasNext();) {
@@ -248,7 +243,7 @@ public class Assignment {
 	 * @return JSONObject with two keys. key "maxLength" for the longest substring
 	 *         length. key "maxSubString" for the longest substring
 	 */
-	private JSONObject longestSubstring(String s) {
+	public JSONObject longestSubstring(String s) {
 		JSONObject jsonObj = new JSONObject();// return JSONObject
 
 		int intputStringLength = s.length();// the length of the input string
@@ -307,7 +302,7 @@ public class Assignment {
 	 * @return JSONObject with keys of coin value and the number of coins that
 	 *         value.
 	 */
-	private int minimumNumberOfCoins(int[] coins, int totalExchange) {
+	public int minimumNumberOfCoins(int[] coins, int totalExchange) {
 		Arrays.parallelSort(coins);
 
 		int coinLen = coins.length;// types of coins
@@ -373,22 +368,21 @@ public class Assignment {
 		return answer;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+//	public static void main(String[] args) {
 //		char a = 'a';
 //		Character character = 'a';
 //
 //		System.out.println(a == character);
 
-		// test card game
+	// test card game
 //		Game game = new Game();
 //
 //		game.start(4);
 
-		Assignment assignment = new Assignment();
+//		Assignment assignment = new Assignment();
 
-		// test log parsing
-		// @formatter:off
+	// test log parsing
+	// @formatter:off
 //		String log = "http://www.yahoo.com/ 150 200\r\n"
 //				+"https://www.yahoo.com/news/ 200 200\r\n"
 //				+"https://sports.yahoo.com/ 10 200\r\n"
@@ -404,33 +398,33 @@ public class Assignment {
 //				;
 		// @formatter:on
 
-		// test parseLog
+	// test parseLog
 //		JSONArray jsonLog = assignment.parseLog(log);
 
-		// test countDomainGroupByCode
+	// test countDomainGroupByCode
 //		System.out.println(assignment.countDomainGroupByCode(jsonLog));
 
-		// test responseTime
+	// test responseTime
 //		System.out.println(assignment.responseTime(jsonLog));
 
-		// test averageResponseTime
+	// test averageResponseTime
 //		System.out.println(assignment.averageResponseTime(jsonLog));
 
-		// test averageResponseTime
+	// test averageResponseTime
 //		System.out.println(assignment.responseTime99percentile(jsonLog));
 
-		// test longestSubstring
+	// test longestSubstring
 //		String s = "bbbbabcabcdcccccccccccccccccccccccccccabde";
 //		System.out.println(assignment.longestSubstring(s));
 
-		// test MinimumNumberOfCoins
-		int[] coins = { 25, 10, 5 };
-		System.out.println(assignment.minimumNumberOfCoins(coins, 30));
-		System.out.println(assignment.minimumNumberOfCoins(coins, 4));
-		System.out.println(assignment.minimumNumberOfCoins(coins, 26));
-		coins = new int[] { 9, 6, 5, 1 };
-		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
-		coins = new int[] { 9, 6, 5, 2 };
-		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
-	}
+	// test MinimumNumberOfCoins
+//		int[] coins = { 25, 10, 5 };
+//		System.out.println(assignment.minimumNumberOfCoins(coins, 30));
+//		System.out.println(assignment.minimumNumberOfCoins(coins, 4));
+//		System.out.println(assignment.minimumNumberOfCoins(coins, 26));
+//		coins = new int[] { 9, 6, 5, 1 };
+//		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
+//		coins = new int[] { 9, 6, 5, 2 };
+//		System.out.println(assignment.minimumNumberOfCoins(coins, 11));
+//	}
 }

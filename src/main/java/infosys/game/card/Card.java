@@ -4,27 +4,41 @@ public class Card {
 	private int number;
 	private int suits;
 
+	/**
+	 * Card class constructor
+	 * 
+	 * @param number the number of the card
+	 * @param suits  the suit of the card
+	 */
 	public Card(int number, int suits) {
 		this.number = number;
 		this.suits = suits;
 	}
 
+	/**
+	 * get the number of the card
+	 * 
+	 * @return the number of the card
+	 */
 	public int getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-	public int getSuits() {
+	/**
+	 * get the suit of the card
+	 * 
+	 * @return the suit of the card
+	 */
+	private int getSuits() {
 		return suits;
 	}
 
-	public void setSuits(int suits) {
-		this.suits = suits;
-	}
-
+	/**
+	 * compare the card is bigger than input card
+	 * 
+	 * @param card the card to be compared
+	 * @return is the card bigger than input card
+	 */
 	public boolean isBigger(Card card) {
 		if (this.number > card.getNumber()) {
 			// number is bigger
@@ -37,6 +51,11 @@ public class Card {
 		return false;
 	}
 
+	/**
+	 * get the english of suit of the card
+	 * 
+	 * @return
+	 */
 	public String getSuitName() {
 		String suitName = "";// the english of suit
 
